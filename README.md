@@ -6,6 +6,14 @@
 
 В качестве датасета использовал геоточки [метро в Москве](https://github.com/nextgis/metro4all/blob/master/data/msk/portals.csv) и [баров в Вашингтоне](https://github.com/benbalter/dc-wifi-social/blob/master/bars.geojson)
 
+## Бандлер
+
+Я использовал тут vite
+
+мне он показался проще в настройке
+
+Так же есть версия с webpack в соседней ветке
+
 ## Используемые библиотеки
 
 - [Leaflet](https://leafletjs.com/): Для отображения интерактивной карты.

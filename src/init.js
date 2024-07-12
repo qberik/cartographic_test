@@ -3,8 +3,8 @@ import "leaflet-groupedlayercontrol";
 
 import { DEFAULT_POSITION } from "./constants";
 
-import play_icon from "./public/play.svg";
-import stop_icon from "./public/stop.svg";
+import play_icon from "/play.svg";
+import stop_icon from "/stop.svg";
 
 export var map = L.map("map", {
   closePopupOnClick: false,
