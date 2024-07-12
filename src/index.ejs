@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Тестовое</title>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <div id="map" class="h-[60vh]"></div>
+    <div class="h-[10vh]">
+      <div class="flex flex-row w-full gap-3 p-4">
+        <p class="text-sm self-center font-medium leading-none">
+          Фильтр по названию
+        </p>
+        <input
+          class="flex h-10 grow rounded-md border px-3 py-2 text-sm"
+          id="name_filter"
+        />
+      </div>
+    </div>
+    <div class="overflow-auto h-[30vh]">
+      <table id="table" class="w-full caption-bottom text-sm">
+        <thead id="thead"></thead>
+        <tbody id="tbody" class="[&_tr:last-child]:border-0"></tbody>
+      </table>
+    </div>
+  </body>
+</html>

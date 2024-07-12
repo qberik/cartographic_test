@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.leaflet-control-layers:nth-child(2) .leaflet-control-layers-toggle {
+  background: url(leaflet/dist/images/layers.png);
+}
