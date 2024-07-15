@@ -1,9 +1,9 @@
-import { getActiveFeatureGroups } from "./init";
+import { getActiveFeatureGroups } from "./initMap";
 import { isMarkerHidden } from "./filter";
-import { presentationStarted } from "./presentaionMode";
-import { map } from "./init";
+import { presentationStarted } from "./presentationMode";
+import { map } from "./initMap";
 
-function setTableHeader(lables) {
+function setTableHeader(lables: string[]) {
   const table_header = document.getElementById("thead");
   table_header.innerHTML = "";
 
@@ -19,7 +19,7 @@ function setTableHeader(lables) {
   });
 }
 
-function insertTableRow(data) {
+function insertTableRow(data: string[]) {
   const table_body = document.getElementById("tbody");
 
   const tr = document.createElement("tr");
@@ -45,26 +45,28 @@ export function showMarkersOnTable() {
   clearTableBody();
   const features = getActiveFeatureGroups().getLayers();
   if (features.length > 0) {
-    const feature_with_most_properties = features.reduce((m, i) =>
-      Object.keys(i.feature.properties).length >
-      Object.keys(m.feature.properties).length
-        ? i
-        : m
+    const feature_with_most_properties = features.reduce(
+      (m: L.Layer, i: L.Layer) =>
+        Object.keys((<MarkerProperty>i).feature.properties).length >
+        Object.keys((<MarkerProperty>m).feature.properties).length
+          ? i
+          : m
     );
     setTableHeader(
-      Object.keys(feature_with_most_properties.feature.properties)
+      Object.keys(
+        (<MarkerProperty>feature_with_most_properties).feature.properties
+      )
     );
-    features.map((f) => {
+    features.map((f: L.Layer) => {
       if (!isMarkerHidden(f)) {
-        insertTableRow(Object.values(f.feature.properties)).addEventListener(
-          "click",
-          () => {
-            if (!presentationStarted) {
-              f.openPopup();
-              map.setView(f.getLatLng(), 15);
-            }
+        insertTableRow(
+          Object.values((<MarkerProperty>f).feature.properties)
+        ).addEventListener("click", () => {
+          if (!presentationStarted) {
+            f.openPopup();
+            map.setView((<L.Marker>f).getLatLng(), 15);
           }
-        );
+        });
       }
     });
   }

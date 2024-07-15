@@ -1,4 +1,4 @@
-export const DEFAULT_POSITION = {
+export const DEFAULT_POSITION: MapState = {
   center: {
     lat: 55.74722770885281,
     lng: 37.600195979999995,

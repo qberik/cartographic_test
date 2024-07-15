@@ -1,4 +1,4 @@
-import L from "leaflet";
+import * as L from "leaflet";
 import "leaflet-groupedlayercontrol";
 
 import { DEFAULT_POSITION } from "./constants";
@@ -10,25 +10,25 @@ export var map = L.map("map", {
   closePopupOnClick: false,
 }).setView(DEFAULT_POSITION.center, DEFAULT_POSITION.zoom);
 
-var map_layer = L.tileLayer(
-  "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-).addTo(map);
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
-export var metro4all = L.featureGroup({});
-export var dc_wifi_social = L.featureGroup({});
+export const metro4all = L.featureGroup();
+export const dc_wifi_social = L.featureGroup();
 
-var groupedOverlays = {
+const groupedOverlays: {
+  [key: string]: { [key: string]: L.FeatureGroup<any> };
+} = {
   Маркеры: {
     "portals.csv": metro4all,
     "bars.geojson": dc_wifi_social,
   },
 };
 
-L.Control.Button = L.Control.extend({
+const PresentationButton = L.Control.extend({
   options: {
     position: "topleft",
   },
-  onAdd: function (map) {
+  onAdd: function () {
     var container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
     var button = L.DomUtil.create(
       "a",
@@ -58,9 +58,9 @@ L.Control.Button = L.Control.extend({
     container.title = "Presentaion toggle";
     return container;
   },
-  onRemove: function (map) {},
+  onRemove: function () {},
 });
-var control = new L.Control.Button();
+var control = new PresentationButton();
 control.addTo(map);
 
 L.control
@@ -69,8 +69,10 @@ L.control
   })
   .addTo(map);
 
-export function getFeatureGroupByName(name) {
-  return Object.values(groupedOverlays)[0][name];
+export function getFeatureGroupByName(name: string) {
+  return Object.values(groupedOverlays)[0][
+    <keyof typeof groupedOverlays.Маркеры>name
+  ];
 }
 
 export function getActiveFeatureGroups() {

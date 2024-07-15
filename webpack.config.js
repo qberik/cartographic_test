@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = {
   mode: "development",
   plugins: [new HtmlWebpackPlugin()],
-  entry: "./src/main.js",
+  entry: "./src/main.ts",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
@@ -19,6 +19,9 @@ module.exports = {
     compress: true,
     historyApiFallback: true,
   },
+  resolve: {
+    extensions: [".tsx", ".ts", ".js"],
+  },
   module: {
     rules: [
       {
@@ -30,6 +33,11 @@ module.exports = {
         test: /\.css$/i,
         include: path.resolve(__dirname, "src"),
         use: ["style-loader", "css-loader", "postcss-loader"],
+      },
+      {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
       },
       {
         test: /\.(jpg|png|gif)$/i,

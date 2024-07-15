@@ -1,8 +1,8 @@
-import { map, getActiveFeatureGroups } from "./init";
+import { map, getActiveFeatureGroups } from "./initMap";
 import { isMarkerHidden } from "./filter";
 import { PRESENTAION_SWITCH_DELAY } from "./constants";
 
-export let presentationStarted;
+export let presentationStarted: boolean;
 
 async function startPresentation() {
   if (!presentationStarted) {
@@ -15,14 +15,14 @@ async function startPresentation() {
 
     const features = getActiveFeatureGroups().getLayers();
 
-    features.forEach((feature) => {
+    features.forEach((feature: L.Layer) => {
       if (!isMarkerHidden(feature)) {
         funcs = funcs.then(() => {
           if (!presentationStarted) {
             throw new Error();
           }
           feature.openPopup();
-          map.setView(feature.getLatLng(), 15);
+          map.setView((<L.Marker>feature).getLatLng(), 15);
           return new Promise((r) => setTimeout(r, PRESENTAION_SWITCH_DELAY));
         });
       }
@@ -58,17 +58,3 @@ export function togglePresentationButton() {
   });
   presentationStarted ? stopPresentaion() : startPresentation();
 }
-
-document
-  .getElementsByClassName("presentaion-control-button")[0]
-  .addEventListener("click", () => {
-    togglePresentationButton();
-  });
-
-document
-  .getElementById("name_filter")
-  .addEventListener("keydown", function (e) {
-    if (presentationStarted) {
-      togglePresentationButton();
-    }
-  });

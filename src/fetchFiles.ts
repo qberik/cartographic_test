@@ -1,6 +1,7 @@
-import { map, dc_wifi_social, metro4all } from "./init";
+import { map, dc_wifi_social, metro4all } from "./initMap";
+import * as L from "leaflet";
 
-export async function fetchGeoJson(URL) {
+export async function fetchGeoJson(URL: string) {
   const res = await fetch(URL);
   const data = await res.json();
 
@@ -20,7 +21,7 @@ export async function fetchGeoJson(URL) {
   });
 }
 
-export async function fetchCSV(URL) {
+export async function fetchCSV(URL: string) {
   const res = await fetch(URL);
   const csv_text = await res.text();
 
@@ -30,8 +31,10 @@ export async function fetchCSV(URL) {
     .slice(1, -1)
     .slice(0, 200)
     .map((point) => {
-      const marker = L.marker([point[6], point[7]]).bindPopup(
-        "<h1>" + point[2] + "</h1><p>name: " + point[3] + "</p>"
+      const marker = <MarkerProperty>(
+        L.marker([parseFloat(point[6]), parseFloat(point[7])]).bindPopup(
+          "<h1>" + point[2] + "</h1><p>name: " + point[3] + "</p>"
+        )
       );
       marker.feature = {
         properties: {
@@ -66,7 +69,7 @@ export async function fetchCSV(URL) {
     });
 }
 
-function CSVToArray(strData, strDelimiter) {
+function CSVToArray(strData: string, strDelimiter: string) {
   // взял отсюда
   // https://www.bennadel.com/blog/1504-ask-ben-parsing-csv-strings-with-javascript-exec-regular-expression-command.htm
   strDelimiter = strDelimiter || ",";
@@ -80,7 +83,7 @@ function CSVToArray(strData, strDelimiter) {
       "\\r\\n]*))",
     "gi"
   );
-  var arrData = [[]];
+  var arrData: string[][] = [[]];
   var arrMatches = null;
   while ((arrMatches = objPattern.exec(strData))) {
     var strMatchedDelimiter = arrMatches[1];
