@@ -57,36 +57,39 @@ async function loadData() {
   const mapState = getMapState();
   setMapPosition(mapState);
 
-  await Promise.all([fetchGeoJson(GEOJSON_FILE_URL), fetchCSV(CSV_FILE_URL)]);
+  await Promise.all([
+    fetchGeoJson(GEOJSON_FILE_URL),
+    fetchCSV(CSV_FILE_URL),
+  ]).then(() => {
+    const savedLayerName = getSelectedLayer();
+    const selectedLayer = getFeatureGroupByName(savedLayerName);
 
-  const savedLayerName = getSelectedLayer();
-  const selectedLayer = getFeatureGroupByName(savedLayerName);
+    selectedLayer.addTo(map);
 
-  selectedLayer.addTo(map);
-
-  const nameFilterInput = document.getElementById(
-    "name_filter"
-  ) as HTMLInputElement;
-  nameFilterInput.value = getFilterText();
-  filterMarkersByName(getFilterText());
-  showMarkersOnTable();
-
-  map.on("overlayadd", (e) => {
-    saveSelectedLayer(e.name);
-    if (presentationStarted) {
-      togglePresentationButton();
-    }
-
-    const featureGroup = getFeatureGroupByName(e.name);
-    featureGroup.getLayers().forEach(showMarker);
-
-    filterMarkersByName(nameFilterInput.value);
+    const nameFilterInput = document.getElementById(
+      "name_filter"
+    ) as HTMLInputElement;
+    nameFilterInput.value = getFilterText();
+    filterMarkersByName(getFilterText());
     showMarkersOnTable();
-    map.fitBounds(featureGroup.getBounds());
-  });
 
-  map.on("zoom", saveMapState);
-  map.on("move", saveMapState);
+    map.on("overlayadd", (e) => {
+      saveSelectedLayer(e.name);
+      if (presentationStarted) {
+        togglePresentationButton();
+      }
+
+      const featureGroup = getFeatureGroupByName(e.name);
+      featureGroup.getLayers().forEach(showMarker);
+
+      filterMarkersByName(nameFilterInput.value);
+      showMarkersOnTable();
+      map.fitBounds(featureGroup.getBounds());
+    });
+
+    map.on("zoom", saveMapState);
+    map.on("move", saveMapState);
+  });
 }
 
 function main() {

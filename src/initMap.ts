@@ -32,7 +32,7 @@ const PresentationButton = L.Control.extend({
     var container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
     var button = L.DomUtil.create(
       "a",
-      "leaflet-control-button presentaion-control-button relative",
+      "leaflet-control-button presentation-control-button relative",
       container
     );
 
