@@ -1,38 +1,37 @@
 const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const devMode = process.env.NODE_ENV !== "production";
 
 module.exports = {
-  mode: "development",
-  plugins: [new HtmlWebpackPlugin()],
   entry: "./src/main.ts",
+  plugins: [new HtmlWebpackPlugin()],
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "bundle.js",
-  },
-  devServer: {
-    static: {
-      directory: path.resolve(__dirname, "dist"),
-    },
-    port: 3000,
-    open: true,
-    hot: true,
-    compress: true,
-    historyApiFallback: true,
+    filename: "[name].bundle.js",
+    clean: true,
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    extensions: [".ts", ".js"],
   },
   module: {
     rules: [
       {
         test: /\.css$/i,
         exclude: path.resolve(__dirname, "src"),
-        use: ["style-loader", "css-loader"],
+        use: [
+          devMode ? "style-loader" : MiniCssExtractPlugin.loader,
+          "css-loader",
+        ],
       },
       {
         test: /\.css$/i,
         include: path.resolve(__dirname, "src"),
-        use: ["style-loader", "css-loader", "postcss-loader"],
+        use: [
+          devMode ? "style-loader" : MiniCssExtractPlugin.loader,
+          "css-loader",
+          "postcss-loader",
+        ],
       },
       {
         test: /\.tsx?$/,
@@ -43,7 +42,6 @@ module.exports = {
         test: /\.(jpg|png|gif)$/i,
         type: "asset/resource",
       },
-
       {
         test: /\.svg/i,
         type: "asset/inline",
